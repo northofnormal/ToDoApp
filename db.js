@@ -61,8 +61,30 @@ var todoDB = (function(){
         'timestamp': timestamp
       };
 
-      
-    }
+      var request = objStore.put(todo);
+
+      request.onsuccess = function(e) {
+        callback(todo);
+      };
+
+      request.onerror = tDB.onerror;
+    };
+
+    tDB.deleteTodo = function(id, callback) {
+      var db = datastore;
+      var transaction = db.transaction(['todo'], 'readwrite');
+      var objStore = transaction.objectStore('todo');
+
+      var request = objStore.delete(id);
+
+      request.onsuccess = function(e) {
+        callback();
+      }
+
+      request.onerror = function(e) {
+        console.log(e);
+      }
+    };
 
   return tDB; 
 }());
